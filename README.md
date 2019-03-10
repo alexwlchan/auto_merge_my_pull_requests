@@ -8,6 +8,8 @@ A GitHub Action to automatically merge pull requests on my repositories if:
 
 After the PR is merged, it deletes the branch to keep things neat and tidy.
 
+![](screenshot.png)
+
 
 
 ## Motivation
