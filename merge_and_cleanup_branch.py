@@ -42,6 +42,12 @@ if __name__ == '__main__':
 
     sess = get_session(github_token)
 
+    # This Action is triggered on check runs that are triggered by a push
+    # to the default branch, but there's nothing to do for them, so exit early.
+    if len(check_run["pull_requests"]) == 0:
+        print("*** Check run is not part of a pull request, so nothing to do")
+        sys.exit(78)
+
     # We should only merge pull requests that have the conclusion "succeeded".
     #
     # We get a check_run event in GitHub Actions when the underlying run is
@@ -49,7 +55,7 @@ if __name__ == '__main__':
     # set to "null".  In that case, we give up -- we'll get a second event when
     # the run completes.
     #
-    # See https://developer.github.com/v3/activity/events/types/#CheckRunEvent
+    # See https://developer.github.com/v3/activity/events/types/#checkrunevent
     #
     conclusion = check_run["conclusion"]
     print(f"*** Conclusion of {name} is {conclusion}")
