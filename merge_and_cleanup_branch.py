@@ -8,6 +8,18 @@ import sys
 import requests
 
 
+def neutral_exit():
+    # In the early versions of GitHub Actions, you could use exit code 78 to
+    # mark a run as "neutral".
+    #
+    # This got removed in later versions because it's not ambiguous.
+    # https://twitter.com/zeitgeistse/status/1163444737057132547
+    #
+    # (Can I say "I told you so"?)
+    #
+    sys.exit(0)
+
+
 def get_session(github_token):
     sess = requests.Session()
     sess.headers = {
@@ -42,11 +54,9 @@ if __name__ == '__main__':
 
     sess = get_session(github_token)
 
-    # This Action is triggered on check runs that are triggered by a push
-    # to the default branch, but there's nothing to do for them, so exit early.
     if len(check_run["pull_requests"]) == 0:
         print("*** Check run is not part of a pull request, so nothing to do")
-        sys.exit(78)
+        neutral_exit()
 
     # We should only merge pull requests that have the conclusion "succeeded".
     #
@@ -62,7 +72,7 @@ if __name__ == '__main__':
 
     if conclusion is None:
         print(f"*** Check run {name} has not completed, skipping")
-        sys.exit(78)
+        neutral_exit()
 
     if conclusion != "success":
         print(f"*** Check run {name} has failed, will not merge PR")
@@ -83,13 +93,13 @@ if __name__ == '__main__':
     print(f"*** Title of PR is {pr_title!r}")
     if pr_title.startswith("[WIP] "):
         print("*** This is a WIP PR, will not merge")
-        sys.exit(78)
+        neutral_exit()
 
     pr_user = pr_data["user"]["login"]
     print(f"*** This PR was opened by {pr_user}")
     if pr_user != "alexwlchan":
         print("*** This PR was opened by somebody who isn't me; requires manual merge")
-        sys.exit(78)
+        neutral_exit()
 
     print("*** This PR is ready to be merged.")
     merge_url = pull_request["url"] + "/merge"
