@@ -43,7 +43,7 @@ jobs:
     - name: Merge and delete branch
       uses: yourname/auto_merge_my_pull_requests@development
       with:
-        secrets: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Limitations
