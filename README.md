@@ -1,3 +1,28 @@
+**Archived 26 May 2022.** This repo is unmaintained and out-of-date; you should probably look at a different Action if you want to auto-merge your pull requests.
+
+> I only ever used this action on a single repository, [alexwlchan/alexwlchan.net], where I would use the following workflow:
+>
+> * Write a new blog post
+> * Open a PR for the blog post
+> * Use Azure Pipelines to build and test the new post (e.g. look for broken links, missing alt text)
+> * If the build succeeded, merge the post and deploy it to my site
+>
+> It used the [`check_run` event][check_run] to notice when the Azure Pipelines build was done, and auto-merge the pull request.
+>
+> I always thought I'd use it in more places, but that never happened.
+>
+> In May 2022 I stopped using Azure Pipelines, and I switched that repo's CI exclusively to GitHub Actions.
+> I couldn't find an easy way to use this Action with the rest of my new Actions-based pipeline, so I replaced it with [a shell script][script] that lives in that repo.
+> 
+> There are other Actions for doing auto-merging of pull requests which are better maintained and more full-featured.
+> I've left the README and code in place in case it's useful for somebody building a new Action, but I don't recommend anybody use this for new projects.
+
+[alexwlchan/alexwlchan.net]: https://github.com/alexwlchan/alexwlchan.net
+[check_run]: https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#check_run
+[script]: https://github.com/alexwlchan/alexwlchan.net/blob/f01cca80db3bbab80efba87e5a6639bc1f0f24af/.github/workflows/build_site.yml#L25-L29
+
+---
+
 # Auto merge my pull requests
 
 A GitHub Action to automatically merge pull requests on my repositories if:
