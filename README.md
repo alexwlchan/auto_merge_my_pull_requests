@@ -52,21 +52,24 @@ The Action is defined in a separate repo that doesn't have auto-merging pull req
 
 Fork this repo, add your own rules in `merge_and_cleanup_branch.py`.
 
-Reference the Action in your `.workflow` file:
+Reference the Action in your workflow file:
 
-```hcl
-workflow "merge_and_cleanup" {
-  on = "pull_request"
-  resolves = ["when tests pass, merge and cleanup"]
-}
-
-action "when tests pass, merge and cleanup" {
-  uses = "yourname/auto_merge_my_pull_requests@development"
-  secrets = ["GITHUB_TOKEN"]
-}
 ```
+name: Merge and cleanup
 
+on: pull_request:
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Merge and delete branch
+      uses: yourname/auto_merge_my_pull_requests@development
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Limitations
 
